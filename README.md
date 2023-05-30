@@ -1,5 +1,10 @@
 # Park
 
+### Setup
+```bash
+pip install -e .
+```
+
 ### Real system interface
 ```python
 import park
