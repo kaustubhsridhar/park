@@ -6,6 +6,12 @@ register(
     env_id='load_balance',
     entry_point='park.envs.load_balance:LoadBalanceEnv',
 )
+for dist in ['Pareto', 'Saw', 'Uniform', 'CyclicPos', 'CyclicNeg', 'DriftPos', 'DriftNeg', 'Constant']:
+    register(
+        env_id=f'load_balance-{dist}',
+        entry_point=f'park.envs.load_balance:LoadBalanceEnv{dist}',
+    )
+
 
 register(
     env_id='abr',

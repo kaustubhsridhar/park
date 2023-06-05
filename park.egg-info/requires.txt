@@ -1,0 +1,7 @@
+numpy
+wget
+networkx
+gym
+dill
+pycapnp
+pandas

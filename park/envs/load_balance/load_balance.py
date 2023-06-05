@@ -48,7 +48,7 @@ class LoadBalanceEnv(core.Env):
         DJ Daley.
         Stochastic Processes and their Applications, 25:301–308, 1987.
     """
-    def __init__(self):
+    def __init__(self, job_distribution='pareto'):
         # observation and action space
         self.setup_space()
         # random seed
@@ -65,18 +65,21 @@ class LoadBalanceEnv(core.Env):
         self.incoming_job = None
         # finished jobs (for logging at the end)
         self.finished_jobs = []
+        # job distribution # New
+        self.generate_job_fn = lambda x: generate_job(x, job_distribution)
+        self.generate_jobs_fn = lambda tup: generate_jobs(tup[0], tup[1], job_distribution)
         # reset environment (generate new jobs)
         self.reset()
 
     def generate_job(self):
         if self.num_stream_jobs_left > 0:
-            dt, size = generate_job(self.np_random)
+            dt, size = self.generate_job_fn(self.np_random)
             t = self.wall_time.curr_time
             self.timeline.push(t + dt, size)
             self.num_stream_jobs_left -= 1
 
     def generate_jobs(self):
-        all_t, all_size = generate_jobs(self.num_stream_jobs, self.np_random)
+        all_t, all_size = self.generate_jobs_fn(self.num_stream_jobs, self.np_random)
         for t, size in zip(all_t, all_size):
             self.timeline.push(t, size)
 
@@ -227,3 +230,36 @@ class LoadBalanceEnv(core.Env):
                self.incoming_job is None)
 
         return self.observe(), reward, done, {'curr_time': self.wall_time.curr_time}
+
+
+class LoadBalanceEnvPareto(LoadBalanceEnv):
+    def __init__(self):
+        super().__init__(job_distribution='Pareto')
+
+class LoadBalanceEnvSaw(LoadBalanceEnv):
+    def __init__(self):
+        super().__init__(job_distribution='Saw')
+
+class LoadBalanceEnvUniform(LoadBalanceEnv):
+    def __init__(self):
+        super().__init__(job_distribution='Uniform')
+
+class LoadBalanceEnvDriftPos(LoadBalanceEnv):
+    def __init__(self):
+        super().__init__(job_distribution='DriftPos')
+
+class LoadBalanceEnvDriftNeg(LoadBalanceEnv):
+    def __init__(self):
+        super().__init__(job_distribution='DriftNeg')
+
+class LoadBalanceEnvCyclicPos(LoadBalanceEnv):
+    def __init__(self):
+        super().__init__(job_distribution='CyclicPos')
+
+class LoadBalanceEnvCyclicNeg(LoadBalanceEnv):
+    def __init__(self):
+        super().__init__(job_distribution='CyclicNeg')
+
+class LoadBalanceEnvConstant(LoadBalanceEnv):
+    def __init__(self):
+        super().__init__(job_distribution='Constant')
