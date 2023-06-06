@@ -1,6 +1,6 @@
 import park
 
-env = park.make('load_balance')
+env = park.make('abr_sim')
 
 obs = env.reset()
 done = False

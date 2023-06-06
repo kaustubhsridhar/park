@@ -41,9 +41,10 @@ def load_traces():
     trace_folder = park.__path__[0] + '/envs/abr_sim/traces/'
 
     if not os.path.exists(trace_folder):
-        wget.download(
-            'https://www.dropbox.com/s/xdlvykz9puhg5xd/cellular_traces.zip?dl=1',
-            out=park.__path__[0] + '/envs/abr_sim/')
+        # wget.download(
+        #     'https://www.dropbox.com/s/xdlvykz9puhg5xd/cellular_traces.zip?dl=1',
+        #     out=park.__path__[0] + '/envs/abr_sim/')
+        # NEW: the above link is broken. Use this instead: https://github.com/pouyahmdn/abr_slowstart/blob/main/env/cellular_traces.zip and put inside the abr_sim folder.
         with zipfile.ZipFile(
              park.__path__[0] + '/envs/abr_sim/cellular_traces.zip', 'r') as zip_f:
             zip_f.extractall(park.__path__[0] + '/envs/abr_sim/')

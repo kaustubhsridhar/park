@@ -3,42 +3,33 @@ from park.param import config
 
 def generate_job(np_random, job_distribution):
     if job_distribution == 'Pareto':
-        # pareto distribution
         size = int((np_random.pareto(
                 config.job_size_pareto_shape) + 1) * \
                 config.job_size_pareto_scale)
     elif job_distribution == 'Saw':
-        # pareto distribution
         size = int((np_random.pareto(
                 config.job_size_pareto_shape) + 1) * \
                 config.job_size_pareto_scale)
-    elif job_distribution == 'Uniform':
-        # pareto distribution
-        size = int((np_random.pareto(
-                config.job_size_pareto_shape) + 1) * \
-                config.job_size_pareto_scale)
+    elif job_distribution == 'Uniform': # Ref: https://github.com/kaustubhsridhar/input_driven_rl_example/blob/master/load_balance/job_generator.py
+        size = int(np_random.uniform(
+                config.job_size_min, config.job_size_max))
     elif job_distribution == 'DriftPos':
-        # pareto distribution
         size = int((np_random.pareto(
                 config.job_size_pareto_shape) + 1) * \
                 config.job_size_pareto_scale)
     elif job_distribution == 'DriftNeg':
-        # pareto distribution
         size = int((np_random.pareto(
                 config.job_size_pareto_shape) + 1) * \
                 config.job_size_pareto_scale)
     elif job_distribution == 'CyclicPos':
-        # pareto distribution
         size = int((np_random.pareto(
                 config.job_size_pareto_shape) + 1) * \
                 config.job_size_pareto_scale)
     elif job_distribution == 'CyclicNeg':
-        # pareto distribution
         size = int((np_random.pareto(
                 config.job_size_pareto_shape) + 1) * \
                 config.job_size_pareto_scale)
     elif job_distribution == 'Constant':
-        # pareto distribution
         size = int((np_random.pareto(
                 config.job_size_pareto_shape) + 1) * \
                 config.job_size_pareto_scale)

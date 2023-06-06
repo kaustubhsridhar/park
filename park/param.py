@@ -29,6 +29,11 @@ parser.add_argument('--job_size_pareto_scale', type=float, default=100.0,
                     help='pareto job size distribution scale (default: 100.0)')
 parser.add_argument('--load_balance_obs_high', type=float, default=500000.0,
                     help='observation cap for load balance env (default: 500000.0)')
+# Ref for below two (job size min/max): https://github.com/kaustubhsridhar/input_driven_rl_example/blob/master/param.py
+parser.add_argument('--job_size_min', type=float, default=100.0, # 
+                    help='minimum job size (default: 100.0)')
+parser.add_argument('--job_size_max', type=float, default=1000.0,
+                    help='maximum job size (default: 1000.0)')
 
 # -- AQM --
 parser.add_argument('--aqm_link_delay', type=int, default=10,
