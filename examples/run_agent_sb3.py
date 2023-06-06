@@ -9,7 +9,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--env_name', type=str, default='abr_sim')
 parser.add_argument('--algo', type=str, default='a2c')
 parser.add_argument('--n_steps', type=int, default=5)
-parser.add_argument('--distribution', type=str, default='Pareto', choices=["default", "Pareto", "Saw", "Uniform", "CyclicPos", "CyclicNeg", "DriftPos", "DriftNeg", "Constant"])
+parser.add_argument('--total_timesteps', type=int, default=10_000_000)
+parser.add_argument('--distribution', type=str, default='default', choices=["default", "Pareto", "Saw", "Uniform", "CyclicPos", "CyclicNeg", "DriftPos", "DriftNeg", "Constant"])
 args = parser.parse_args()
 
 # create gym env from park env
@@ -30,8 +31,9 @@ if args.algo == 'ppo':
     algo_class = PPO 
 elif args.algo == 'a2c':
     algo_class = A2C
-model = algo_class("MlpPolicy", env, verbose=1, ent_coef=1.0, ent_decay_num_steps = 10_000, n_steps=args.n_steps, max_grad_norm=10.0, save_path=save_path)
-model.learn(total_timesteps=100_000_000)
+max_grad_norm = 10.0 if args.env_name == 'load_balance' else 0.5
+model = algo_class("MlpPolicy", env, verbose=1, ent_coef=1.0, ent_decay_num_steps = 10_000, n_steps=args.n_steps, max_grad_norm=max_grad_norm, save_path=save_path)
+model.learn(total_timesteps=args.total_timesteps)
 
 # test
 obs = env.reset()
