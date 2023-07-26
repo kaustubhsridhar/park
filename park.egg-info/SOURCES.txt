@@ -6,6 +6,7 @@ park/core.py
 park/logger.py
 park/param.py
 park/park_to_dm_wrapper.py
+park/park_to_gym_wrapper.py
 park.egg-info/PKG-INFO
 park.egg-info/SOURCES.txt
 park.egg-info/dependency_links.txt
