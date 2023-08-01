@@ -6,33 +6,9 @@ def generate_job(np_random, job_distribution):
         size = int((np_random.pareto(
                 config.job_size_pareto_shape) + 1) * \
                 config.job_size_pareto_scale)
-    elif job_distribution == 'Saw':
-        size = int((np_random.pareto(
-                config.job_size_pareto_shape) + 1) * \
-                config.job_size_pareto_scale)
     elif job_distribution == 'Uniform': # Ref: https://github.com/kaustubhsridhar/input_driven_rl_example/blob/master/load_balance/job_generator.py
         size = int(np_random.uniform(
                 config.job_size_min, config.job_size_max))
-    elif job_distribution == 'DriftPos':
-        size = int((np_random.pareto(
-                config.job_size_pareto_shape) + 1) * \
-                config.job_size_pareto_scale)
-    elif job_distribution == 'DriftNeg':
-        size = int((np_random.pareto(
-                config.job_size_pareto_shape) + 1) * \
-                config.job_size_pareto_scale)
-    elif job_distribution == 'CyclicPos':
-        size = int((np_random.pareto(
-                config.job_size_pareto_shape) + 1) * \
-                config.job_size_pareto_scale)
-    elif job_distribution == 'CyclicNeg':
-        size = int((np_random.pareto(
-                config.job_size_pareto_shape) + 1) * \
-                config.job_size_pareto_scale)
-    elif job_distribution == 'Constant':
-        size = int((np_random.pareto(
-                config.job_size_pareto_shape) + 1) * \
-                config.job_size_pareto_scale)
 
     t = int(np_random.exponential(config.job_interval))
 

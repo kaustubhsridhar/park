@@ -40,4 +40,10 @@ class Box(core.Space):
         return np_random.uniform(low=self.low, high=self.high + (0 if self.dtype.kind == 'f' else 1), size=self.low.shape).astype(self.dtype)
 
     def contains(self, x):
-        return x.shape == self.shape and (x >= self.low).all() and (x <= self.high).all()
+        cd1 = x.shape == self.shape
+        if not cd1: print("shape mismatch {} != {}".format(x.shape, self.shape))
+        cd2 = (x >= self.low).all()
+        if not cd2: print("low violation {} < {}".format(x, self.low))
+        cd3 = (x <= self.high).all()
+        if not cd3: print("high violation {} > {}".format(x, self.high))
+        return cd1 and cd2 and cd3

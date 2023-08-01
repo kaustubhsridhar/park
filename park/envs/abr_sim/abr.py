@@ -79,9 +79,14 @@ class ABRSimEnv(core.Env):
         else:
             valid_past_action = 0
 
+        # get the throughput to be used in next call of step() function
+        throuput = self.trace[1][self.curr_t_idx]
+
         # network throughput of past chunk, past chunk download time,
         # current buffer, number of chunks left and the last bitrate choice
-        obs_arr = [self.past_chunk_throughputs[-1],
+        obs_arr = [throuput,
+                   self.curr_t_idx-self.init_t_idx if self.curr_t_idx >= self.init_t_idx else len(self.trace[1])-self.init_t_idx+self.curr_t_idx,
+                   self.past_chunk_throughputs[-1],
                    self.past_chunk_download_times[-1],
                    self.buffer_size,
                    self.total_num_chunks - self.chunk_idx,
@@ -108,6 +113,7 @@ class ABRSimEnv(core.Env):
     def reset(self):
         self.trace, self.curr_t_idx = \
             sample_trace(self.all_traces, self.np_random)
+        self.init_t_idx = self.curr_t_idx
         self.chunk_time_left = get_chunk_time(
             self.trace, self.curr_t_idx)
         self.chunk_idx = 0
@@ -129,9 +135,9 @@ class ABRSimEnv(core.Env):
         # The boundary of the space may change if the dynamics is changed
         # a warning message will show up every time e.g., the observation falls
         # out of the observation space
-        self.obs_low = np.array([0] * 11)
+        self.obs_low = np.array([0] * 13)
         self.obs_high = np.array([
-            10e6, 100, 100, 500, 5, 10e6, 10e6, 10e6, 10e6, 10e6, 10e6])
+            10e6, 10e6, 10e6, 100, 100, 500, 5, 10e6, 10e6, 10e6, 10e6, 10e6, 10e6])
         self.observation_space = spaces.Box(
             low=self.obs_low, high=self.obs_high, dtype=np.float32)
         self.action_space = spaces.Discrete(6)

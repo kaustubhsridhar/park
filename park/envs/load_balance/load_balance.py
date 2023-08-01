@@ -122,13 +122,15 @@ class LoadBalanceEnv(core.Env):
         if self.incoming_job is None:
             obs_arr.append(0)
         else:
-            if self.incoming_job.size > self.obs_high[-1]:
+            if self.incoming_job.size > self.obs_high[-2]:
                 logger.warn('Incoming job at time ' + str(self.wall_time.curr_time) +
                               ' has size ' + str(self.incoming_job.size) +
-                              ' larger than obs_high ' + str(self.obs_high[-1]))
-                obs_arr.append(self.obs_high[-1])
+                              ' larger than obs_high ' + str(self.obs_high[-2]))
+                obs_arr.append(self.obs_high[-2])
             else:
                 obs_arr.append(self.incoming_job.size)
+            assert self.incoming_job.arrival_time == self.wall_time.curr_time
+        obs_arr.append(self.wall_time.curr_time)
 
         obs_arr = np.array(obs_arr)
         assert self.observation_space.contains(obs_arr)
@@ -156,8 +158,8 @@ class LoadBalanceEnv(core.Env):
         # The boundary of the space may change if the dynamics is changed
         # a warning message will show up every time e.g., the observation falls
         # out of the observation space
-        self.obs_low = np.array([0] * (config.num_servers + 1))
-        self.obs_high = np.array([config.load_balance_obs_high] * (config.num_servers + 1))
+        self.obs_low = np.array([0] * (config.num_servers + 2))
+        self.obs_high = np.array([config.load_balance_obs_high] * (config.num_servers + 1) + [10e8])
         self.observation_space = spaces.Box(
             low=self.obs_low, high=self.obs_high, dtype=np.float32)
         self.action_space = spaces.Discrete(config.num_servers)
