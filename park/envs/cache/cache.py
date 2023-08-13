@@ -30,8 +30,8 @@ class TraceSrc(object):
         self.load_trace = load_traces(self.trace, self.cache_size, 0)
         self.n_request = len(self.load_trace)
         self.cache_size = cache_size
-        self.min_values = np.asarray([1, 0, 0, 0])
-        self.max_values = np.asarray([self.cache_size, 10e6, self.cache_size, max(self.load_trace[0])])
+        self.min_values = np.asarray([0, 0, 1, 0])
+        self.max_values = np.asarray([self.cache_size, max(self.load_trace[0]), self.cache_size, 10e6])
         self.req = 0
 
     def reset(self, random):
@@ -195,7 +195,7 @@ class CacheSim(object):
             except IndexError:
                 # Unseen objects (not in non_cache or cache) are assigned this recency constant
                 req = config.cache_unseen_recency
-        state = [obj_size, obj_time, self.cache_remain, req]
+        state = [self.cache_remain, req, obj_size, obj_time] # last two are exogenous
 
         return state
 

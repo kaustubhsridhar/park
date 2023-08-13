@@ -9,6 +9,8 @@ def generate_job(np_random, job_distribution):
     elif job_distribution == 'Uniform': # Ref: https://github.com/kaustubhsridhar/input_driven_rl_example/blob/master/load_balance/job_generator.py
         size = int(np_random.uniform(
                 config.job_size_min, config.job_size_max))
+    else:
+        raise ValueError('Unknown job distribution')
 
     t = int(np_random.exponential(config.job_interval))
 

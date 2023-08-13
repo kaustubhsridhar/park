@@ -84,9 +84,7 @@ class ABRSimEnv(core.Env):
 
         # network throughput of past chunk, past chunk download time,
         # current buffer, number of chunks left and the last bitrate choice
-        obs_arr = [throuput,
-                   self.curr_t_idx-self.init_t_idx if self.curr_t_idx >= self.init_t_idx else len(self.trace[1])-self.init_t_idx+self.curr_t_idx,
-                   self.past_chunk_throughputs[-1],
+        obs_arr = [self.past_chunk_throughputs[-1],
                    self.past_chunk_download_times[-1],
                    self.buffer_size,
                    self.total_num_chunks - self.chunk_idx,
@@ -94,6 +92,11 @@ class ABRSimEnv(core.Env):
 
         # current chunk size of different bitrates
         obs_arr.extend(self.chunk_sizes[i][valid_chunk_idx] for i in range(6))
+
+        # add exogenous information
+        obs_arr.extend([throuput,
+            self.curr_t_idx-self.init_t_idx if self.curr_t_idx >= self.init_t_idx else len(self.trace[1])-self.init_t_idx+self.curr_t_idx])
+                   
 
         # fit in observation space
         for i in range(len(obs_arr)):
@@ -137,7 +140,7 @@ class ABRSimEnv(core.Env):
         # out of the observation space
         self.obs_low = np.array([0] * 13)
         self.obs_high = np.array([
-            10e6, 10e6, 10e6, 100, 100, 500, 5, 10e6, 10e6, 10e6, 10e6, 10e6, 10e6])
+            10e6, 100, 100, 500, 5, 10e6, 10e6, 10e6, 10e6, 10e6, 10e6, 10e6, 10e6])
         self.observation_space = spaces.Box(
             low=self.obs_low, high=self.obs_high, dtype=np.float32)
         self.action_space = spaces.Discrete(6)
